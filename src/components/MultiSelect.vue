@@ -8,6 +8,9 @@
     </b-card>
     <b-card v-if="collapse" class="multi-select-body">
       <div class="px-2 py-2 text-left">
+        <b-form-input v-model="search" id="input-small" size="md" placeholder="Search"></b-form-input>
+      </div>
+      <div class="px-2 py-2 text-left">
         <b-form-checkbox v-model="selectall">Select All</b-form-checkbox>
       </div>
       <div class="px-2 py-2 text-left" v-for="permission in permissions" :key="permission.name">
@@ -22,6 +25,7 @@ export default {
   data: () => ({
     collapse: false,
     selectall: false,
+    search: '',
     icon: "v",
     permissions: [
       {
@@ -35,42 +39,42 @@ export default {
         flag: false
       },
       {
-        name: "Create",
+        name: "Update",
         description: "blah blah blah",
         flag: false
       },
       {
-        name: "Create",
+        name: "Update",
         description: "blah blah blah",
         flag: false
       },
       {
-        name: "Create",
+        name: "Delete",
         description: "blah blah blah",
         flag: false
       },
       {
-        name: "Create",
+        name: "Delete",
         description: "blah blah blah",
         flag: false
       },
       {
-        name: "Create",
+        name: "Read",
         description: "blah blah blah",
         flag: false
       },
       {
-        name: "Create",
+        name: "Read",
         description: "blah blah blah",
         flag: false
       },
       {
-        name: "Create",
+        name: "Write",
         description: "blah blah blah",
         flag: false
       },
       {
-        name: "Create",
+        name: "Write",
         description: "blah blah blah",
         flag: false
       },
@@ -103,6 +107,10 @@ export default {
           permission.flag = false;
         });
       }
+    },
+
+    search: function(newVal, old) {
+      const temp = this.permissions.filter(permission => permission.name.match(this.search) != -1);
     }
   }
 };
