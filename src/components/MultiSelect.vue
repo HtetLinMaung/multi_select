@@ -1,0 +1,133 @@
+<template>
+  <div>
+    <b-card class="multi-select">
+      <div class="px-2 lead py-2 text-left" @click="dropDown">
+        Select
+        <span style="float: right;">{{ icon }}</span>
+      </div>
+    </b-card>
+    <b-card v-if="collapse" class="multi-select-body">
+      <div class="px-2 py-2 text-left">
+        <b-form-checkbox v-model="selectall">Select All</b-form-checkbox>
+      </div>
+      <div class="px-2 py-2 text-left" v-for="permission in permissions" :key="permission.name">
+        <b-form-checkbox v-model="permission.flag" name="check-button">{{ permission.name }}</b-form-checkbox>
+      </div>
+    </b-card>
+  </div>
+</template>
+
+<script>
+export default {
+  data: () => ({
+    collapse: false,
+    selectall: false,
+    icon: "v",
+    permissions: [
+      {
+        name: "Create",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Create",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Create",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Create",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Create",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Create",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Create",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Create",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Create",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Create",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Create",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Create",
+        description: "blah blah blah",
+        flag: false
+      }
+    ]
+  }),
+  methods: {
+    dropDown() {
+      this.collapse = !this.collapse;
+      this.icon = this.collapse ? "^" : "v";
+    }
+  },
+  watch: {
+    selectall: function(newVal, old) {
+      if (newVal) {
+        this.permissions.forEach(permission => {
+          permission.flag = true;
+        });
+      } else {
+        this.permissions.forEach(permission => {
+          permission.flag = false;
+        });
+      }
+    }
+  }
+};
+</script>
+
+<style lang="scss">
+.multi-select {
+  max-width: 28rem;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  .card-body {
+    padding: 0;
+  }
+}
+
+.multi-select-body {
+  .card-body {
+    padding: 0;
+  }
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  max-width: 28rem;
+}
+
+// div.card-body:nth-child(even) {
+//   background-color: red !important;
+// }
+</style>
