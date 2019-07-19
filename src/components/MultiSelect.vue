@@ -8,8 +8,8 @@
             pill
             variant="outline-secondary"
             class="py-0 px-2 mx-1"
-            v-for="(collection, index) in selectedCollections.slice(0,3)"
-            :key="index"
+            v-for="collection in selectedCollections.slice(0,3)"
+            :key="collection.id"
           >{{collection.name}}</b-button>
         </span>
         <span style="float: right;" class="ml-2">{{ icon }}</span>
@@ -26,8 +26,8 @@
           pill
           variant="outline-secondary"
           class="py-0 px-3 m-1"
-          v-for="(collection, index) in selectedCollections"
-          :key="index"
+          v-for="collection in selectedCollections"
+          :key="collection.id"
         >{{collection.name}}</b-button>
       </div>
       <div v-show="temp.length" class="text-left">
@@ -39,11 +39,21 @@
 
       <div
         class="px-2 py-2 text-left striped"
-        v-for="(collection, index) in collections.slice(start, end)"
-        :key="index"
+        v-for="collection in collections.slice(start, end)"
+        :key="collection.id"
       >
-        <span style="float: right;"></span>
-        <b-form-checkbox v-model="collection.flag" name="check-button">{{ collection.name }}</b-form-checkbox>
+        <b-button
+          v-b-popover.hover="collection.description"
+          pill
+          :title="collection.name"
+          style="float: right; display: inline-block"
+          class="py-0 px-2 m-0"
+        >?</b-button>
+        <b-form-checkbox
+          v-model="collection.flag"
+          name="check-button"
+          style="display: inline-block"
+        >{{ collection.name }}</b-form-checkbox>
       </div>
       <div v-show="collections.length > 5" class="px-2 py-2">
         <b-button size="sm" variant="light" pill @click="prevItems">Previous</b-button>
@@ -107,6 +117,12 @@ export default {
       }
       this.end = this.start;
       this.start -= this.increment;
+    },
+    recalculatePositions() {
+      this.last_page = Math.ceil(this.collections.length / this.increment);
+      this.start = 0;
+      this.end = this.increment;
+      this.page = 1;
     }
   },
   computed: {
@@ -127,12 +143,12 @@ export default {
     search: function(newVal, old) {
       if (!newVal) {
         this.collections = this.temp;
-        this.last_page = Math.ceil(this.collections.length / this.increment);
+        this.recalculatePositions();
       } else {
         this.collections = this.collections.filter(collection =>
           collection.name.match(new RegExp(`^${newVal}`, "i"))
         );
-        this.last_page = Math.ceil(this.collections.length / this.increment);
+        this.recalculatePositions();
       }
     },
 

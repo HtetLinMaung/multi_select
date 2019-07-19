@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="ml-5">
+  <div id="app">
     <MultiSelect selectTitle="Select" :items="permissions" :perItems="5" @selected="yourFunction" />
   </div>
 </template>
