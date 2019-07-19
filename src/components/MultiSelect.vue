@@ -31,7 +31,7 @@
         >{{collection.name}}</b-button>
       </div>
       <div v-show="temp.length" class="text-left">
-        <b-form-input v-model="search" id="input-small" size="md" placeholder="Search"></b-form-input>
+        <b-form-input v-model.lazy="search" id="input-small" size="md" placeholder="Search"></b-form-input>
       </div>
       <div v-show="collections.length" class="px-2 py-2 text-left">
         <b-form-checkbox v-model="selectall">Select All</b-form-checkbox>
@@ -45,7 +45,7 @@
         <span style="float: right;"></span>
         <b-form-checkbox v-model="collection.flag" name="check-button">{{ collection.name }}</b-form-checkbox>
       </div>
-      <div class="px-2 py-2">
+      <div v-show="collections.length > 5" class="px-2 py-2">
         <b-button size="sm" variant="light" pill @click="prevItems">Previous</b-button>
         <span style="float: right">
           <b-button variant="light" pill size="sm" @click="nextItems">Next</b-button>
@@ -127,16 +127,17 @@ export default {
     search: function(newVal, old) {
       if (!newVal) {
         this.collections = this.temp;
+        this.last_page = Math.ceil(this.collections.length / this.increment);
       } else {
-        this.collections = this.collections.filter(
-          collection =>
-            collection.name.match(new RegExp(`^${newVal}`, "i")) != null
+        this.collections = this.collections.filter(collection =>
+          collection.name.match(new RegExp(`^${newVal}`, "i"))
         );
+        this.last_page = Math.ceil(this.collections.length / this.increment);
       }
     },
 
     selectedItems: function(newVal, old) {
-      if(!newVal.length) this.selectall = false;
+      if (!newVal.length) this.selectall = false;
       this.$emit("selected", newVal);
     }
   },

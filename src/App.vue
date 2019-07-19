@@ -90,7 +90,7 @@ export default {
   }),
   methods: {
     yourFunction(selected_items) {
-      console.log(selected_items);
+      // console.log(selected_items);
     }
   }
 };
