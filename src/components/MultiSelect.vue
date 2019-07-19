@@ -1,22 +1,23 @@
 <template>
   <div>
     <b-card class="multi-select">
-      <div class="px-2 lead py-2 text-left" @click="dropDown">
+      <div class="px-2 py-2 text-left" @click="dropDown">
         {{selectTitle}}
         <span style="float: right;">{{ icon }}</span>
       </div>
     </b-card>
     <b-card v-if="collapse" class="multi-select-body">
       <div v-show="selectedCollections.length" class="px-2 py-2 text-left">
-        <b-badge
+        <b-button
+          @click="removeItem(collection.id)"
           pill
-          variant="light"
-          class="py-2 px-4 m-1"
+          variant="outline-secondary"
+          class="py-0 px-3 m-1"
           v-for="(collection, index) in selectedCollections"
           :key="index"
-        >{{collection.name}}</b-badge>
+        >{{collection.name}}</b-button>
       </div>
-      <div class="text-left">
+      <div v-show="temp.length" class="text-left">
         <b-form-input v-model="search" id="input-small" size="md" placeholder="Search"></b-form-input>
       </div>
       <div v-show="collections.length" class="px-2 py-2 text-left">
@@ -45,8 +46,8 @@ export default {
       search: "",
       icon: "v",
       temp: null,
-      collections: this.items,
-      selectedItems: [],
+      collections: this.items || [],
+      selectedItems: []
     };
   },
   methods: {
@@ -54,28 +55,31 @@ export default {
       this.collapse = !this.collapse;
       this.icon = this.collapse ? "^" : "v";
     },
-
     addSelected() {
       console.log("add working!");
+    },
+    removeItem(id) {
+      for (const collection of this.collections) {
+        if (id == collection.id) {
+          collection.flag = false;
+          break;
+        }
+      }
     }
   },
   computed: {
     selectedCollections() {
-      this.selectedItems = this.collections.filter(collection => collection.flag);
+      this.selectedItems = this.collections.filter(
+        collection => collection.flag
+      );
       return this.selectedItems;
     }
   },
   watch: {
     selectall: function(newVal, old) {
-      if (newVal) {
-        this.collections.forEach(collection => {
-          collection.flag = true;
-        });
-      } else {
-        this.collections.forEach(collection => {
-          collection.flag = false;
-        });
-      }
+      this.collections.forEach(collection => {
+        collection.flag = newVal;
+      });
     },
 
     search: function(newVal, old) {
@@ -96,22 +100,14 @@ export default {
 </script>
 
 <style lang="scss">
-.multi-select {
+.multi-select,
+.multi-select-body {
   max-width: 28rem;
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
   .card-body {
     padding: 0;
   }
-}
-
-.multi-select-body {
-  .card-body {
-    padding: 0;
-  }
-  border-top-left-radius: 0 !important;
-  border-top-right-radius: 0 !important;
-  max-width: 28rem;
 }
 
 .striped:nth-child(even) {
