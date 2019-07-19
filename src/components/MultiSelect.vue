@@ -7,13 +7,28 @@
       </div>
     </b-card>
     <b-card v-if="collapse" class="multi-select-body">
-      <div class="px-2 py-2 text-left">
+      <div v-show="selectedPermissions.length" class="px-2 py-2 text-left">
+        <b-badge
+          pill
+          variant="light"
+          class="py-2 px-4 m-1"
+          v-for="permission in selectedPermissions"
+          :key="permission"
+        >{{permission.name}}</b-badge>
+      </div>
+      <div class="text-left">
         <b-form-input v-model="search" id="input-small" size="md" placeholder="Search"></b-form-input>
       </div>
       <div v-show="permissions.length" class="px-2 py-2 text-left">
         <b-form-checkbox v-model="selectall">Select All</b-form-checkbox>
       </div>
-      <div class="px-2 py-2 text-left" v-for="(permission, index) in permissions" :key="index">
+
+      <div
+        class="px-2 py-2 text-left striped"
+        v-for="(permission, index) in permissions"
+        :key="index"
+      >
+        <span style="float: right;"></span>
         <b-form-checkbox v-model="permission.flag" name="check-button">{{ permission.name }}</b-form-checkbox>
       </div>
     </b-card>
@@ -95,6 +110,15 @@ export default {
     dropDown() {
       this.collapse = !this.collapse;
       this.icon = this.collapse ? "^" : "v";
+    },
+
+    addSelected() {
+      console.log("add working!");
+    }
+  },
+  computed: {
+    selectedPermissions() {
+      return this.permissions.filter(permission => permission.flag);
     }
   },
   watch: {
@@ -146,7 +170,7 @@ export default {
   max-width: 28rem;
 }
 
-// div.card-body:nth-child(even) {
-//   background-color: red !important;
-// }
+.striped:nth-child(even) {
+  background-color: #f7fcff;
+}
 </style>
