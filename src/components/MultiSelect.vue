@@ -2,8 +2,18 @@
   <div>
     <b-card class="multi-select">
       <div class="px-2 py-2 text-left" @click="dropDown">
-        {{selectTitle}}
-        <span style="float: right;">{{ icon }}</span>
+        <span v-if="!selectedItems.length || collapse">{{selectTitle}}</span>
+        <span v-if="selectedItems.length && !collapse">
+          <b-button
+            pill
+            variant="outline-secondary"
+            class="py-0 px-2 mx-1"
+            v-for="(collection, index) in selectedCollections.slice(0,3)"
+            :key="index"
+          >{{collection.name}}</b-button>
+        </span>
+        <span style="float: right;" class="ml-2">{{ icon }}</span>
+        <span v-show="selectedItems.length > 3 && !collapse" style="float: right">+ {{selectedCollections.length - 3}} more</span>
       </div>
     </b-card>
     <b-card v-if="collapse" class="multi-select-body">
@@ -41,6 +51,7 @@ export default {
   props: ["selectTitle", "items"],
   data() {
     return {
+      titleFlag: true,
       collapse: false,
       selectall: false,
       search: "",
@@ -54,9 +65,6 @@ export default {
     dropDown() {
       this.collapse = !this.collapse;
       this.icon = this.collapse ? "^" : "v";
-    },
-    addSelected() {
-      console.log("add working!");
     },
     removeItem(id) {
       for (const collection of this.collections) {
@@ -90,6 +98,10 @@ export default {
           collection => collection.name.match(new RegExp(`^${newVal}`)) != null
         );
       }
+    },
+
+    selectedItems: function(newVal, old) {
+      if(newVal.length) this.$emit('selected', newVal);
     }
   },
 

@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="ml-5">
-    <MultiSelect selectTitle="Select" :items="permissions" />
+    <MultiSelect selectTitle="Select" :items="permissions" @selected="yourFunction" />
   </div>
 </template>
 
@@ -87,7 +87,12 @@ export default {
         flag: false
       }
     ]
-  })
+  }),
+  methods: {
+    yourFunction(items) {
+      console.log(items);
+    }
+  }
 };
 </script>
 
