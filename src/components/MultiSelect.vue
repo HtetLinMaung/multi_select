@@ -10,10 +10,10 @@
       <div class="px-2 py-2 text-left">
         <b-form-input v-model="search" id="input-small" size="md" placeholder="Search"></b-form-input>
       </div>
-      <div class="px-2 py-2 text-left">
+      <div v-show="permissions.length" class="px-2 py-2 text-left">
         <b-form-checkbox v-model="selectall">Select All</b-form-checkbox>
       </div>
-      <div class="px-2 py-2 text-left" v-for="permission in permissions" :key="permission.name">
+      <div class="px-2 py-2 text-left" v-for="(permission, index) in permissions" :key="index">
         <b-form-checkbox v-model="permission.flag" name="check-button">{{ permission.name }}</b-form-checkbox>
       </div>
     </b-card>
@@ -25,8 +25,9 @@ export default {
   data: () => ({
     collapse: false,
     selectall: false,
-    search: '',
+    search: "",
     icon: "v",
+    temp: null,
     permissions: [
       {
         name: "Create",
@@ -110,8 +111,18 @@ export default {
     },
 
     search: function(newVal, old) {
-      const temp = this.permissions.filter(permission => permission.name.match(this.search) != -1);
+      if (!newVal) {
+        this.permissions = this.temp;
+      } else {
+        this.permissions = this.permissions.filter(
+          permission => permission.name.match(new RegExp(`^${newVal}`)) != null
+        );
+      }
     }
+  },
+
+  mounted() {
+    this.temp = this.permissions;
   }
 };
 </script>
