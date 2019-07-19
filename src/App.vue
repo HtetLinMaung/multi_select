@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="ml-5">
-    <MultiSelect selectTitle="Select" :items="permissions" @selected="yourFunction" />
+    <MultiSelect selectTitle="Select" :items="permissions" :perItems="5" @selected="yourFunction" />
   </div>
 </template>
 
@@ -89,8 +89,8 @@ export default {
     ]
   }),
   methods: {
-    yourFunction(items) {
-      console.log(items);
+    yourFunction(selected_items) {
+      console.log(selected_items);
     }
   }
 };
@@ -98,11 +98,6 @@ export default {
 
 <style lang="scss">
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
   margin-top: 60px;
 }
 </style>

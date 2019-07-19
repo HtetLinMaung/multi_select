@@ -13,7 +13,10 @@
           >{{collection.name}}</b-button>
         </span>
         <span style="float: right;" class="ml-2">{{ icon }}</span>
-        <span v-show="selectedItems.length > 3 && !collapse" style="float: right">+ {{selectedCollections.length - 3}} more</span>
+        <span
+          v-show="selectedItems.length > 3 && !collapse"
+          style="float: right"
+        >+ {{selectedCollections.length - 3}} more</span>
       </div>
     </b-card>
     <b-card v-if="collapse" class="multi-select-body">
@@ -36,11 +39,17 @@
 
       <div
         class="px-2 py-2 text-left striped"
-        v-for="(collection, index) in collections"
+        v-for="(collection, index) in collections.slice(start, end)"
         :key="index"
       >
         <span style="float: right;"></span>
         <b-form-checkbox v-model="collection.flag" name="check-button">{{ collection.name }}</b-form-checkbox>
+      </div>
+      <div class="px-2 py-2">
+        <b-button size="sm" variant="light" pill @click="prevItems">Previous</b-button>
+        <span style="float: right">
+          <b-button variant="light" pill size="sm" @click="nextItems">Next</b-button>
+        </span>
       </div>
     </b-card>
   </div>
@@ -48,9 +57,14 @@
 
 <script>
 export default {
-  props: ["selectTitle", "items"],
+  props: ["selectTitle", "items", "perItems"],
   data() {
     return {
+      page: 1,
+      last_page: null,
+      start: 0,
+      end: 0,
+      increment: this.perItems,
       titleFlag: true,
       collapse: false,
       selectall: false,
@@ -73,6 +87,26 @@ export default {
           break;
         }
       }
+    },
+    nextItems() {
+      if (++this.page > this.last_page) {
+        this.start = 0;
+        this.end = this.increment;
+        this.page = 1;
+        return;
+      }
+      this.start = this.end;
+      this.end += this.increment;
+    },
+    prevItems() {
+      if (--this.page == 0) {
+        this.end = this.increment * this.last_page;
+        this.start = this.end - this.increment;
+        this.page = this.last_page;
+        return;
+      }
+      this.end = this.start;
+      this.start -= this.increment;
     }
   },
   computed: {
@@ -95,18 +129,22 @@ export default {
         this.collections = this.temp;
       } else {
         this.collections = this.collections.filter(
-          collection => collection.name.match(new RegExp(`^${newVal}`)) != null
+          collection =>
+            collection.name.match(new RegExp(`^${newVal}`, "i")) != null
         );
       }
     },
 
     selectedItems: function(newVal, old) {
-      if(newVal.length) this.$emit('selected', newVal);
+      if(!newVal.length) this.selectall = false;
+      this.$emit("selected", newVal);
     }
   },
 
   mounted() {
     this.temp = this.collections;
+    this.end = this.increment;
+    this.last_page = Math.ceil(this.collections.length / this.increment);
   }
 };
 </script>
