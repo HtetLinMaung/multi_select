@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="ml-5">
-    <MultiSelect />
+    <MultiSelect selectTitle="Select" :items="permissions" />
   </div>
 </template>
 
@@ -11,7 +11,71 @@ export default {
   name: "app",
   components: {
     MultiSelect
-  }
+  },
+  data: () => ({
+    permissions: [
+      {
+        name: "Create",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Create",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Update",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Update",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Delete",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Delete",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Read",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Read",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Write",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Write",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Create",
+        description: "blah blah blah",
+        flag: false
+      },
+      {
+        name: "Create",
+        description: "blah blah blah",
+        flag: false
+      }
+    ]
+  })
 };
 </script>
 

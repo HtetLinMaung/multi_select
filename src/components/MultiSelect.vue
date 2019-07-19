@@ -2,34 +2,34 @@
   <div>
     <b-card class="multi-select">
       <div class="px-2 lead py-2 text-left" @click="dropDown">
-        Select
+        {{selectTitle}}
         <span style="float: right;">{{ icon }}</span>
       </div>
     </b-card>
     <b-card v-if="collapse" class="multi-select-body">
-      <div v-show="selectedPermissions.length" class="px-2 py-2 text-left">
+      <div v-show="selectedCollections.length" class="px-2 py-2 text-left">
         <b-badge
           pill
           variant="light"
           class="py-2 px-4 m-1"
-          v-for="permission in selectedPermissions"
-          :key="permission"
-        >{{permission.name}}</b-badge>
+          v-for="(collection, index) in selectedCollections"
+          :key="index"
+        >{{collection.name}}</b-badge>
       </div>
       <div class="text-left">
         <b-form-input v-model="search" id="input-small" size="md" placeholder="Search"></b-form-input>
       </div>
-      <div v-show="permissions.length" class="px-2 py-2 text-left">
+      <div v-show="collections.length" class="px-2 py-2 text-left">
         <b-form-checkbox v-model="selectall">Select All</b-form-checkbox>
       </div>
 
       <div
         class="px-2 py-2 text-left striped"
-        v-for="(permission, index) in permissions"
+        v-for="(collection, index) in collections"
         :key="index"
       >
         <span style="float: right;"></span>
-        <b-form-checkbox v-model="permission.flag" name="check-button">{{ permission.name }}</b-form-checkbox>
+        <b-form-checkbox v-model="collection.flag" name="check-button">{{ collection.name }}</b-form-checkbox>
       </div>
     </b-card>
   </div>
@@ -37,75 +37,18 @@
 
 <script>
 export default {
-  data: () => ({
-    collapse: false,
-    selectall: false,
-    search: "",
-    icon: "v",
-    temp: null,
-    permissions: [
-      {
-        name: "Create",
-        description: "blah blah blah",
-        flag: false
-      },
-      {
-        name: "Create",
-        description: "blah blah blah",
-        flag: false
-      },
-      {
-        name: "Update",
-        description: "blah blah blah",
-        flag: false
-      },
-      {
-        name: "Update",
-        description: "blah blah blah",
-        flag: false
-      },
-      {
-        name: "Delete",
-        description: "blah blah blah",
-        flag: false
-      },
-      {
-        name: "Delete",
-        description: "blah blah blah",
-        flag: false
-      },
-      {
-        name: "Read",
-        description: "blah blah blah",
-        flag: false
-      },
-      {
-        name: "Read",
-        description: "blah blah blah",
-        flag: false
-      },
-      {
-        name: "Write",
-        description: "blah blah blah",
-        flag: false
-      },
-      {
-        name: "Write",
-        description: "blah blah blah",
-        flag: false
-      },
-      {
-        name: "Create",
-        description: "blah blah blah",
-        flag: false
-      },
-      {
-        name: "Create",
-        description: "blah blah blah",
-        flag: false
-      }
-    ]
-  }),
+  props: ["selectTitle", "items"],
+  data() {
+    return {
+      collapse: false,
+      selectall: false,
+      search: "",
+      icon: "v",
+      temp: null,
+      collections: this.items,
+      selectedItems: [],
+    };
+  },
   methods: {
     dropDown() {
       this.collapse = !this.collapse;
@@ -117,36 +60,37 @@ export default {
     }
   },
   computed: {
-    selectedPermissions() {
-      return this.permissions.filter(permission => permission.flag);
+    selectedCollections() {
+      this.selectedItems = this.collections.filter(collection => collection.flag);
+      return this.selectedItems;
     }
   },
   watch: {
     selectall: function(newVal, old) {
       if (newVal) {
-        this.permissions.forEach(permission => {
-          permission.flag = true;
+        this.collections.forEach(collection => {
+          collection.flag = true;
         });
       } else {
-        this.permissions.forEach(permission => {
-          permission.flag = false;
+        this.collections.forEach(collection => {
+          collection.flag = false;
         });
       }
     },
 
     search: function(newVal, old) {
       if (!newVal) {
-        this.permissions = this.temp;
+        this.collections = this.temp;
       } else {
-        this.permissions = this.permissions.filter(
-          permission => permission.name.match(new RegExp(`^${newVal}`)) != null
+        this.collections = this.collections.filter(
+          collection => collection.name.match(new RegExp(`^${newVal}`)) != null
         );
       }
     }
   },
 
   mounted() {
-    this.temp = this.permissions;
+    this.temp = this.collections;
   }
 };
 </script>
