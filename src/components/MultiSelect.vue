@@ -1,8 +1,9 @@
 <template>
   <div>
-    <b-card class="multi-select">
+    <b-card class="multi-select" v-if="theme == 'themelight'">
       <div class="px-2 py-2 text-left" @click="dropDown">
         <span v-if="!selectedItems.length || collapse">{{selectTitle}}</span>
+        <span>{{selectTitle}}</span>
         <span v-if="selectedItems.length && !collapse">
           <b-button
             pill
@@ -12,7 +13,7 @@
             :key="collection.id"
           >{{collection.name}}</b-button>
         </span>
-        <span style="float: right;" class="ml-2">{{ icon }}</span>
+        <span style="float: right;" class="ml-2">{{ icon }}<i v-if="collapse" class="fas fa-caret-square-up"></i> <i v-if="!collapse" class="fas fa-caret-square-down"></i></span>
         <span
           v-show="selectedItems.length > 3 && !collapse"
           style="float: right"
@@ -67,7 +68,7 @@
 
 <script>
 export default {
-  props: ["selectTitle", "items", "perItems"],
+  props: ["selectTitle", "theme", "items", "perItems"],
   data() {
     return {
       page: 1,
@@ -79,7 +80,7 @@ export default {
       collapse: false,
       selectall: false,
       search: "",
-      icon: "v",
+      icon: "",
       temp: null,
       collections: this.items || [],
       selectedItems: []
@@ -88,7 +89,7 @@ export default {
   methods: {
     dropDown() {
       this.collapse = !this.collapse;
-      this.icon = this.collapse ? "^" : "v";
+      // this.icon = this.collapse ? "^" : "v";
     },
     removeItem(id) {
       for (const collection of this.collections) {
@@ -176,8 +177,7 @@ export default {
     padding: 0;
   }
 }
-
-.striped:nth-child(even) {
-  background-color: #f7fcff;
+.light .striped:nth-child(even) {
+  background-color: red;
 }
 </style>
