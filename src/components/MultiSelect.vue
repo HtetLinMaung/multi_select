@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <b-card class="multi-select" v-if="theme == 'themelight'">
+  <div :class="theme">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <b-card class="multi-select">
       <div class="px-2 py-2 text-left" @click="dropDown">
         <span v-if="!selectedItems.length || collapse">{{selectTitle}}</span>
         <span>{{selectTitle}}</span>
@@ -23,13 +24,12 @@
     <b-card v-if="collapse" class="multi-select-body">
       <div v-show="selectedCollections.length" class="px-2 py-2 text-left">
         <b-button
-          @click="removeItem(collection.id)"
           pill
           variant="outline-secondary"
           class="py-0 px-3 m-1"
           v-for="collection in selectedCollections"
           :key="collection.id"
-        >{{collection.name}}</b-button>
+        >{{collection.name}} <i @click="removeItem(collection.id)" class="fas fa-minus-circle"></i></b-button>
       </div>
       <div v-show="temp.length" class="text-left">
         <b-form-input v-model.lazy="search" id="input-small" size="md" placeholder="Search"></b-form-input>
@@ -50,6 +50,7 @@
           style="float: right; display: inline-block"
           class="py-0 px-2 m-0"
         >?</b-button>
+        <i class="far fa-question-circle"></i>
         <b-form-checkbox
           v-model="collection.flag"
           name="check-button"
@@ -168,16 +169,34 @@ export default {
 </script>
 
 <style lang="scss">
-.multi-select,
-.multi-select-body {
-  max-width: 28rem;
-  border-bottom-left-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
-  .card-body {
-    padding: 0;
-  }
+.light .card-body{
+  background-color: #e2e2e2;
 }
-.light .striped:nth-child(even) {
-  background-color: red;
+.light .card{
+  max-width: 53rem;
+}
+.light .btn-outline-secondary {
+    color: #ffffff;
+    border-color: red;
+    background-color: red;
+}
+.dark .card-body{
+  background-color: #ff6b6b;
+}
+.dark .card{
+  max-width: 23rem;
+}
+.dark .btn-outline-secondary {
+    color: #ffffff;
+     background-color: #fff;
+     -webkit-animation: random 30s infinite;
+     animation: random 45s infinite;
+}
+@keyframes  random {
+    15% { background-color: red; border-color: red; } 
+    30% { background-color: yellow; border-color: yellow; } 
+    45% { background-color: green; border-color: green; } 
+    60% { background-color: blue; border-color: blue; }
+    75% { background-color: white; border-color: white; }  
 }
 </style>

@@ -1,10 +1,7 @@
 <template>
   <div id="app">
-    <link rel="stylesheet" 
-        href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" 
-        integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" 
-        crossorigin="anonymous">
-    <MultiSelect selectTitle="Selected" theme="themelight" :items="permissions" :perItems="5" @selected="yourFunction" />
+
+    <MultiSelect selectTitle="Selected" theme="light" :items="permissions" :perItems="5" @selected="yourFunction" />
   </div>
 </template>
 
